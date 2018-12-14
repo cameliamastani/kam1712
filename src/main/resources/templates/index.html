@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Liste des films</title>
+    <div th:replace="fragments/header :: header-css"/>
+</head>
+<body>
+<div th:replace="fragments/header :: header"/>
+<h1 th:text="'Liste des films :'"></h1>
+<ul>
+    <li th:each="film : ${films}">
+        <a th:text="${film.titre} + ' ('+${film.notation}+')'" th:href="@{/film/{id}(id=${film.id})}"></a>
+    </li>
+</ul>
+<div th:replace="fragments/footer :: footer"/>
+</body>
+</html>
