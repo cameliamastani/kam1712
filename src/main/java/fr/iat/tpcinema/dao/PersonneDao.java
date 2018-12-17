@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.math.BigInteger;
 import java.util.List;
 
 @Component
@@ -22,7 +21,14 @@ public class PersonneDao {
     @Transactional
     public void save(Personne p) {
 
-        entityManager.persist(p);
+        entityManager.merge(p);
+    }
+
+
+    @Transactional
+    public void remove (Personne p) {
+
+        entityManager.remove(p);
     }
 
     public List<Personne> getAll(){
@@ -30,7 +36,7 @@ public class PersonneDao {
         return query.getResultList();
     }
 
-    public Personne getById(BigInteger id){
+    public Personne getById(long id){
         Personne retVal = null;
         Query query = entityManager.createQuery("select p from Personne p where p.id = :id");
         query.setParameter("id", id);

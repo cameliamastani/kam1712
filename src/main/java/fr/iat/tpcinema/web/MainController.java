@@ -2,13 +2,13 @@ package fr.iat.tpcinema.web;
 
 
 import fr.iat.tpcinema.dao.PersonneDao;
+import fr.iat.tpcinema.model.Personne;
 
 import fr.iat.tpcinema.service.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,19 +20,21 @@ import java.io.OutputStream;
 //TODO séparer les acteurs des réalisateurs en typant les personnes, conditionner les controlleurs en fonction du type
 
 @Controller
+@RequestMapping(value = "/person")
 public class MainController {
-//
-//    @Autowired
-//    FilmDao filmDao = new FilmDao();
-
     @Autowired
-    PersonneDao personneDao = new PersonneDao();
+    PersonneDao personneDao;
 //
 //    @Autowired
 //    RoleDao roleDao;
 
     @Autowired
     private Path path;
+
+    @Autowired
+    public MainController(PersonneDao personneDao) {
+        this.personneDao = personneDao;
+    }
 
 //    @GetMapping("/")
 //    public String main(Model model) {
@@ -43,7 +45,7 @@ public class MainController {
     @GetMapping("/liste-acteurs")
     public String listeActeurs(Model model) {
         model.addAttribute("personnes", personneDao.getAll());
-        return "liste-acteurs";
+        return "person/liste-acteurs";
     }
 
     // Version avec @RequestParam
@@ -70,7 +72,7 @@ public class MainController {
     }
 */
 
-    @GetMapping("/affiches/{id}")
+    @GetMapping("person/affiches/{id}")
     public void affiche(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") String id) throws IOException {
 
 //        String affichesPath="C:\\Users\\cyril\\OUTER HEAVEN\\CDA\\varni\\tp-springboot\\sources\\affiches\\";
@@ -96,7 +98,7 @@ public class MainController {
         in.close();
     }
 
-    @GetMapping("/personnes/{id}")
+    @GetMapping("person/personnes/{id}")
     public void personne(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") String id) throws IOException {
 
         String filename = path.getPersonne() + id;
@@ -119,5 +121,57 @@ public class MainController {
         }
         out.close();
         in.close();
+
+
+
+
+
     }
+
+
+
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") long id, Model model){
+        model.addAttribute("personne", personneDao.getById(id));
+        return "person/detail";
+    }
+
+
+    @GetMapping("/mod/{id}")
+    public String mod(@PathVariable("id")long id, Model model){
+        Personne p = personneDao.getById(id);
+        System.out.println(p);
+        model.addAttribute("personne", p);
+        return "person/form";
+    }
+
+    @GetMapping("/sup/{id}")
+    public String sup(@PathVariable("id")long id, Model model){
+        Personne p = personneDao.getById(id);
+        System.out.println(p);
+        model.addAttribute("personne", p);
+        return "person/formsup";
+    }
+
+    @GetMapping("/add")
+    public String add(Model model){
+        Personne personne = new Personne();
+        model.addAttribute("personne",personne);
+        return "person/form";
+    }
+
+    @PostMapping("/add")
+    public String submit(@ModelAttribute Personne personne){
+        personneDao.save(personne);
+        return "redirect:/person/liste-acteurs";
+    }
+
+
+    @PostMapping("/sup")
+    public String submit0(@ModelAttribute Personne personne){
+        personneDao.remove(personne);
+        return "redirect:/person/liste-acteurs";
+    }
+
+
 }

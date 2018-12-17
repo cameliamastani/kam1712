@@ -1,21 +1,23 @@
 //package fr.iat.tpcinema.dao;
 //
 //import fr.iat.tpcinema.model.Film;
+//import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Component;
 //
+//import javax.persistence.EntityManager;
 //import java.util.Arrays;
 //import java.util.List;
 //
-///**
-// * Created by fred on 03/02/2016.
-// *
-// * @author student : IAmTerror
-// */
+//
 //
 //@Component
 //public class FilmDao {
+//    @Autowired
+//    private EntityManager entityManager;
 //
-//    PersonneDao personneDao = new PersonneDao();
+//    @Autowired
+//    PersonneDao personneDao ;
+//
 //    private List<Film> films;
 //
 //    public FilmDao() {

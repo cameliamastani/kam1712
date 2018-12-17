@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:replace="fragments/header :: header-css"/>
+</head>
+<body>
+<div th:replace="fragments/header :: header"/>
+<form action="#" th:action="@{/person/add}" th:object="${personne}" method="post">
+    <input type="hidden" th:field="*{id}"/>
+    <p>Prénom : <input type="text" th:field="*{prenom}"/></p>
+    <p>Nom : <input type="text" th:field="*{nom}"/></p>
+    <p>Annee de naissance : <input type="text" th:field="*{naissance}"/></p>
+    <p>Photo : <input type="text" th:field="*{photoPath}"/></p>
+    <input type="submit" value="Valider" />
+
+
+</form>
+<div th:replace="fragments/footer :: footer"/>
+</body>
+</html>
